@@ -6,7 +6,7 @@ function TopBar(props) {
   if (props.results > 0) {
     return (
       <ListGroupItem color="success" >
-        Showing results for '{props.text == '' ? 'any' : props.text}', <Badge color="success">{props.results > 5 ? '1-5' : '1-' + props.results }</Badge> of a total of <Badge color="success">{props.results}</Badge> results.
+        Showing results for '{props.text === '' ? 'any' : props.text}', <Badge color="success">{props.results > 5 ? '1-5' : '1-' + props.results }</Badge> of a total of <Badge color="success">{props.results}</Badge> results.
       </ListGroupItem>
     );
   }
@@ -31,7 +31,18 @@ class DisplayList extends Component {
           {filtered.slice(0,5).map(
             elements => {
               return(
-                <ListGroupItem key={elements.Id} tag="a" href="#" action onClick = {(e) => this.props.addPOI({id: elements.Id, name: elements.Name})}>
+                <ListGroupItem key={elements.Id} tag="a" action onClick = {(e) => this.props.addPOI(
+                    {
+                      id: elements.Id,
+                      name: elements.Name,
+                      desc: elements.Toldescribe,
+                      pic: elements.Picture1,
+                      add: elements.Add,
+                      cls: elements.Class1,
+                      px: elements.Px,
+                      py: elements.Py,
+                    }
+                  )}>
                   <ListGroupItemHeading>{elements.Name}</ListGroupItemHeading>
                   <ListGroupItemText className="text-truncate">
                     {elements.Toldescribe}

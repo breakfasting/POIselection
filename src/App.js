@@ -3,6 +3,7 @@ import DisplayList from './DisplayList';
 import Selected from './Selected';
 import { Container, Row, Col, Jumbotron, InputGroup, Input, Button } from 'reactstrap';
 import './App.css';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 
 class App extends Component {
@@ -14,6 +15,7 @@ class App extends Component {
     };
     this.handleFilter = this.handleFilter.bind(this);
     this.addPOI = this.addPOI.bind(this);
+    this.deletePOI = this.deletePOI.bind(this);
   }
 
   handleFilter(event) {
@@ -26,6 +28,15 @@ class App extends Component {
     this.setState({
       selected: [...this.state.selected, key],
     })
+  }
+
+  deletePOI(key) {
+    let initArray = this.state.selected;
+    let deleteElement = initArray.findIndex(element => {return element.id === key});
+    initArray.splice(deleteElement,1);
+    this.setState({
+      selected: initArray,
+    });
   }
 
   render() {
@@ -52,10 +63,16 @@ class App extends Component {
               <DisplayList filterText={this.state.filterText} addPOI={this.addPOI} />
             </Col>
             <Col lg="10" className="mt-5">
-              <h1 class="display-3">Selected POIs</h1>
-              <Selected />
+              <h1 className="display-3">Selected POIs</h1>
+              <Selected selected={this.state.selected} deletePOI={this.deletePOI} />
             </Col>
           </Row>
+          <Link to={{
+            pathname: '/about',
+            state: this.state.selected,
+          }}>
+            <Button color="info" className="mb-5" disabled={this.state.selected.length > 0 ? false : true }>Next Step ></Button>
+          </Link>
           
 
         </Container>
