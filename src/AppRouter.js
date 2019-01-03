@@ -6,16 +6,11 @@ import {
   NavbarToggler,
   NavbarBrand,
   Nav,
-  NavItem,
-  NavLink,
-  UncontrolledDropdown,
-  DropdownToggle,
-  DropdownMenu,
-  DropdownItem
+  NavItem
 } from 'reactstrap';
 import App from './App';
+import Matrix from './Matrix';
 
-const About = () => <h2>About</h2>;
 const Users = () => <h2>Users</h2>;
 
 class AppRouter extends Component {
@@ -39,24 +34,24 @@ class AppRouter extends Component {
       <Router>
         <div>
           <Navbar color="light" light expand="md">
-            <NavbarBrand href="/">reactstrap</NavbarBrand>
+            <NavbarBrand href="/">weatherPlans</NavbarBrand>
             <NavbarToggler onClick={this.toggle} />
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
-                <NavItem>
+                <NavItem className="nav-link">
                   <Link to="/">Home</Link>
                 </NavItem>
-                <NavItem>
-                  <Link to="/about/">About</Link>
+                <NavItem className="nav-link">
+                  <Link to="/matrix/">Matrix</Link>
                 </NavItem>
-                <NavItem>
+                <NavItem className="nav-link">
                   <Link to="/users/">Users</Link>
                 </NavItem>
               </Nav>
             </Collapse>
           </Navbar>
           <Route path="/" exact component={App} />
-          <Route path="/about/" component={About} />
+          <Route path="/matrix/" component={Matrix} />
           <Route path="/users/" component={Users} />
         </div>
       </Router>

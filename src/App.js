@@ -68,7 +68,7 @@ class App extends Component {
             </Col>
           </Row>
           <Link to={{
-            pathname: '/about',
+            pathname: '/matrix',
             state: this.state.selected,
           }}>
             <Button color="info" className="mb-5" disabled={this.state.selected.length > 0 ? false : true }>Next Step ></Button>
