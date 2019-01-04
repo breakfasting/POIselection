@@ -17,6 +17,12 @@ class Matrix extends Component {
     }
   }
 
+  componentDidMount() {
+    fetch('https://maps.googleapis.com/maps/api/distancematrix/json?origins=新北市萬里區野柳村港東路167-1號|新北市石門區富基里&destinations=新北市石門區楓林路27號|新北市金山區金包里街16號&language=zh-TW&key=AIzaSyA5-ZGuoZHs5sTMUfIq07oGYjfpOTK8qsA')
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
+
   render() {
     return (
       <Container>
