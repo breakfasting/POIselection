@@ -1,5 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table } from 'reactstrap';
+import config from './config';
+const googleMapsClient = require('@google/maps').createClient({
+  key: config.google_key,
+  Promise: Promise
+});
 
 class Matrix extends Component {
   constructor(props) {
@@ -15,6 +20,17 @@ class Matrix extends Component {
         selected: this.props.location.state,
       });
     }
+  }
+
+  componentDidMount() {
+    googleMapsClient.geocode({address: '1600 Amphitheatre Parkway, Mountain View, CA'})
+    .asPromise()
+    .then((response) => {
+      console.log(response.json.results);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
   }
 
   render() {
