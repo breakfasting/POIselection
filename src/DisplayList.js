@@ -41,6 +41,7 @@ class DisplayList extends Component {
                       cls: elements.Class1,
                       px: elements.Px,
                       py: elements.Py,
+                      od: false,
                     }
                   )}>
                   <ListGroupItemHeading>{elements.Name}</ListGroupItemHeading>

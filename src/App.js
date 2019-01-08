@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import DisplayList from './DisplayList';
 import Selected from './Selected';
-import { Container, Row, Col, Jumbotron, InputGroup, Input, Button } from 'reactstrap';
+import { Container, Row, Col, Jumbotron, InputGroup, Input, Button, Alert } from 'reactstrap';
 import './App.css';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -39,6 +39,21 @@ class App extends Component {
     });
   }
 
+  componentDidMount() {
+    this.addPOI(
+    {
+      id: 'POI_SYSTEM_DEFAULT_ORIGIN',
+      name: '國立臺灣大學',
+      desc: '國立臺灣大學，簡稱臺大、NTU，是臺灣第一所現代綜合大學，為臺灣學生人數最多的高等教育機構。其始於1928年日治時代中期創校的「臺北帝國大學」，1945年中華民國接收臺灣後經改制與兩次易名始用現名。',
+      pic: 'https://www.ntu.edu.tw/images/photo/academicsPhoto_1.jpg',
+      add: '台北市大安區羅斯福路四段1號',
+      cls: 1,
+      px: 121.535549,
+      py: 25.014947,
+      od: true,
+    });
+  }
+
   render() {
     return (
       <div className="App">
@@ -64,6 +79,9 @@ class App extends Component {
             </Col>
             <Col lg="10" className="mt-5">
               <h1 className="display-3">Selected POIs</h1>
+              <Alert color="info">
+                The Origin and Destination are both defaulted as 'National Taiwan Uniwersity'.
+              </Alert>
               <Selected selected={this.state.selected} deletePOI={this.deletePOI} />
             </Col>
           </Row>

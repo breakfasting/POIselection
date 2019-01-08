@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Card, Button, CardImg, CardTitle, CardText, CardColumns,
-  CardSubtitle, CardBody
+  CardSubtitle, CardBody, Badge
 } from 'reactstrap';
 
 class Selected extends Component {
@@ -17,7 +17,8 @@ class Selected extends Component {
                 <CardTitle className="font-weight-bold">{elements.name}</CardTitle>
                 <CardSubtitle>{elements.add}</CardSubtitle>
                 <CardText className="text-muted">{elements.desc.substring(0,30)}</CardText>
-                <Button close onClick={(e) => this.props.deletePOI(elements.id)}/>
+                {(elements.od) ? <div><Badge color="primary">Origin</Badge> <Badge color="success">Destination</Badge></div> : <Button close onClick={(e) => this.props.deletePOI(elements.id)}/>}
+                
               </CardBody>
             </Card>
           )

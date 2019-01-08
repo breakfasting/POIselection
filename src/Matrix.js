@@ -33,7 +33,7 @@ class Matrix extends Component {
     let coordinates = coordinatesArray.join('|');
     console.log(coordinates);
     // let origins = '新北市萬里區野柳村港東路167-1號|新北市石門區富基里|新北市石門區楓林路27號|新北市金山區金包里街16號';
-    fetch('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + coordinates + '&destinations=' + coordinates + '&language=zh-TW&key=' + config.google_key)
+    fetch('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + origins + '&destinations=' + origins + '&language=zh-TW&key=' + config.google_key)
       .then(response => response.json())
       .then(data => {
         if (data.status === 'OK') {
@@ -57,17 +57,17 @@ class Matrix extends Component {
         <Table responsive bordered>
           <thead>
             <tr>
-              <th>#</th>
+              <th className="table-light text-right">Origin\Destination</th>
                 {this.state.selected.map( element => {
-                  return <th>{element.name}</th>;
+                  return <th key={element.id} >{element.name}</th>;
                 } )}
             </tr>
           </thead>
           <tbody>
             {this.state.rows.map( (element, index) => {
-              return (<tr>
-                <th>{this.state.selected[index].name}</th>
-                  {element.elements.map(e => {return <td>{(e.status === "OK")? (e.duration.value === 0 ? '-' : e.duration.text ): e.status}</td>})}
+              return (<tr key={index} >
+                <th className="table-light text-right">{this.state.selected[index].name}</th>
+                  {element.elements.map((e, j) => {return <td key={index*25+j} >{(e.status === "OK") ? (e.duration.value === 0 ? '-' : e.duration.text ) : (e.status === 'ZERO_RESULTS') ? '查無結果' : e.status}</td>})}
               </tr>);
             } )}
 
