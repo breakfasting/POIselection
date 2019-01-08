@@ -6,11 +6,14 @@ const googleMapsClient = require('@google/maps').createClient({
   Promise: Promise
 });
 
+
+
 class Matrix extends Component {
   constructor(props) {
     super(props);
     this.state = {
       selected: [],
+      rows: [],
     };
   }
 
@@ -23,14 +26,21 @@ class Matrix extends Component {
   }
 
   componentDidMount() {
-    googleMapsClient.geocode({address: '1600 Amphitheatre Parkway, Mountain View, CA'})
-    .asPromise()
-    .then((response) => {
-      console.log(response.json.results);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
+    let originsArray = this.state.selected.map(element => {return element.add});
+    let origins = originsArray.join('|');
+    console.log(origins);
+    let coordinatesArray = this.state.selected.map(e => {return e.py + ',' + e.px});
+    let coordinates = coordinatesArray.join('|');
+    console.log(coordinates);
+    // let origins = '新北市萬里區野柳村港東路167-1號|新北市石門區富基里|新北市石門區楓林路27號|新北市金山區金包里街16號';
+    fetch('https://maps.googleapis.com/maps/api/distancematrix/json?origins=' + coordinates + '&destinations=' + coordinates + '&language=zh-TW&key=' + config.google_key)
+      .then(response => response.json())
+      .then(data => {
+        if (data.status === 'OK') {
+          console.log(data.rows);
+          this.setState({ rows: data.rows });
+        }
+      });
   }
 
   render() {
@@ -54,16 +64,24 @@ class Matrix extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.selected.map( element => {
+            {this.state.rows.map( (element, index) => {
+              return (<tr>
+                <th>{this.state.selected[index].name}</th>
+                  {element.elements.map(e => {return <td>{(e.status === "OK")? (e.duration.value === 0 ? '-' : e.duration.text ): e.status}</td>})}
+              </tr>);
+            } )}
+
+            {/* {this.state.selected.map( (element, index) => {
               return (
                 <tr> 
                   <th>{element.name}</th>
-                    {this.state.selected.map( element => {
-                      return <td>data</td>;
-                    } )}                  
+                    {this.state.rows[index].elements.map( e => {return <td>e.duration.text</td>)}
+                    {this.state.rows.map( element => {
+                      return <td>{element.elements[index].duration.text}</td>;
+                    } )}                
                 </tr>
               );
-            } )}
+            } )} */}
             {/* <tr>
               <th scope="row">台灣金屬創意館</th>
               <td>Table cell</td>
