@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table } from 'reactstrap';
 import config from './config';
-const googleMapsClient = require('@google/maps').createClient({
-  key: config.google_key,
-  Promise: Promise
-});
+
+const grabContent = url => fetch(url)
+     .then(res => res.json())
+     .then(data => console.log(data));
 
 
 
@@ -41,6 +41,11 @@ class Matrix extends Component {
           this.setState({ rows: data.rows });
         }
       });
+    let urlsArray = this.state.selected.map(element => {return 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating&language=zh-TW&key=' + config.google_key });
+    console.log(urlsArray);
+    Promise
+      .all(urlsArray.map(grabContent))
+      .then(() => console.log(`Urls were grabbed`))  
   }
 
   render() {
@@ -70,36 +75,6 @@ class Matrix extends Component {
                   {element.elements.map((e, j) => {return <td key={index*25+j} >{(e.status === "OK") ? (e.duration.value === 0 ? '-' : e.duration.text ) : (e.status === 'ZERO_RESULTS') ? '查無結果' : e.status}</td>})}
               </tr>);
             } )}
-
-            {/* {this.state.selected.map( (element, index) => {
-              return (
-                <tr> 
-                  <th>{element.name}</th>
-                    {this.state.rows[index].elements.map( e => {return <td>e.duration.text</td>)}
-                    {this.state.rows.map( element => {
-                      return <td>{element.elements[index].duration.text}</td>;
-                    } )}                
-                </tr>
-              );
-            } )} */}
-            {/* <tr>
-              <th scope="row">台灣金屬創意館</th>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <th scope="row">2</th>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr>
-            <tr>
-              <th scope="row">3</th>
-              <td>Table cell</td>
-              <td>Table cell</td>
-              <td>Table cell</td>
-            </tr> */}
           </tbody>
         </Table>
       </Container>
