@@ -12,8 +12,6 @@ import App from './App';
 import Matrix from './Matrix';
 import Weather from './Weather';
 
-const Users = () => <h2>Users</h2>;
-
 class AppRouter extends Component {
   constructor(props) {
     super(props);
