@@ -10,6 +10,7 @@ import {
 } from 'reactstrap';
 import App from './App';
 import Matrix from './Matrix';
+import Weather from './Weather';
 
 const Users = () => <h2>Users</h2>;
 
@@ -45,14 +46,14 @@ class AppRouter extends Component {
                   <Link to="/matrix/">Matrix</Link>
                 </NavItem>
                 <NavItem className="nav-link">
-                  <Link to="/users/">Users</Link>
+                  <Link to="/weather/">Weather</Link>
                 </NavItem>
               </Nav>
             </Collapse>
           </Navbar>
           <Route path="/" exact component={App} />
           <Route path="/matrix/" component={Matrix} />
-          <Route path="/users/" component={Users} />
+          <Route path="/weather/" component={Weather} />
         </div>
       </Router>
     );

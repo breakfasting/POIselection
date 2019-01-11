@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table } from 'reactstrap';
 import config from './config';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const grabContent = url => fetch(url)
-     .then(res => res.json())
-     .then(data => console.log(data));
+// const grabContent = url => fetch(url)
+//      .then(res => res.json())
+//      .then(data => console.log(data));
 
 
 
@@ -41,11 +42,11 @@ class Matrix extends Component {
           this.setState({ rows: data.rows });
         }
       });
-    let urlsArray = this.state.selected.map(element => {return 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating&language=zh-TW&key=' + config.google_key });
-    console.log(urlsArray);
-    Promise
-      .all(urlsArray.map(grabContent))
-      .then(() => console.log(`Urls were grabbed`))  
+    // let urlsArray = this.state.selected.map(element => {return 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating&language=zh-TW&key=' + config.google_key });
+    // console.log(urlsArray);
+    // Promise
+    //   .all(urlsArray.map(grabContent))
+    //   .then(() => console.log(`Urls were grabbed`))  
   }
 
   render() {
@@ -77,6 +78,12 @@ class Matrix extends Component {
             } )}
           </tbody>
         </Table>
+        <Link to={{
+            pathname: '/weather',
+            state: this.state,
+          }}>
+            <Button color="info" className="mb-5" disabled={this.state.selected.length > 0 ? false : true }>Next Step ></Button>
+          </Link>
       </Container>
     );
   }
