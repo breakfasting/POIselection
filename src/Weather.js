@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
-  Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table, Card, CardHeader, CardFooter, CardBody, CardSubtitle,
-  CardTitle, CardText
+  Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table, Card, CardHeader, CardFooter, CardBody, CardSubtitle, Progress,
+  CardTitle, CardText, ListGroup, ListGroupItem 
 } from 'reactstrap';
 import config from './config';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
@@ -56,9 +56,20 @@ class Weather extends Component {
           <CardHeader>Place ID and Opening hours accquired from cache.</CardHeader>
           <CardBody>
             <CardTitle><h5>國立臺灣大學</h5></CardTitle>
-            <CardSubtitle>大安區</CardSubtitle>
-            <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
+            <CardSubtitle><h6 className="text-muted">大安區</h6></CardSubtitle>
+            <CardText className="text-truncate">國立臺灣大學，簡稱臺大、NTU，是臺灣第一所現代綜合大學，為臺灣學生人數最多的高等教育機構。其始於1928年日治時代中期創校的「臺北帝國大學」，1945年中華民國接收臺灣後經改制與兩次易名始用現名。</CardText>
           </CardBody>
+          <ListGroup>
+            <ListGroupItem>
+              <h6>Opening Hours</h6>
+              <Progress multi>
+                <Progress bar color="light" value="15"></Progress>
+                <Progress bar color="success" value="60">Open</Progress>
+                <Progress bar color="light" value="25"></Progress>
+              </Progress>
+            </ListGroupItem>
+            <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+          </ListGroup>
         </Card>
 
         <Card className="mb-5">
