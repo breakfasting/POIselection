@@ -11,11 +11,77 @@ import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 //   .then(res => res.json())
 //   .then(data => console.log(data));
 
-function checkCache(poi) {
-  fetch(poi.url)
-    .then(res => res.json())
-    .then(data => console.log(data));
+// key should be myid
+const templateCache = {
+  placeID: '',
+  open: {},
+  town: '',
+};
+
+const promiseCache = (poi) => {
+  return new Promise((resolve, reject) => {
+    const cachedHits = localStorage.getItem(poi.myid);
+    if (cachedHits) {
+      resolve(JSON.parse(cachedHits));
+    } else {
+      console.log('cache not found, proceed to fetch');
+      fetch(poi.url)
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          if (data.status === 'OK') {
+            let placeID = data.candidates[0].place_id;
+            let url = 'https://maps.googleapis.com/maps/api/place/details/json?placeid=' + placeID + '&fields=name,opening_hours,address_components&key=' + config.google_key;
+            fetch(url)
+              .then(res => res.json())
+              // .then(data => console.log(data))
+              .then((data) => {
+                let found = data.result.address_components.find(element => {return element.types[0] === 'postal_code'});
+                let response = {
+                  placeID: placeID,
+                  open: data.result.opening_hours,
+                  town: found.long_name,
+                }
+                console.log(data);
+                localStorage.setItem(poi.myid, JSON.stringify(response));
+                resolve(response);
+              })
+          } else if (data.status === 'ZERO_RESULTS') {
+            let url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + poi.add + '&key=' + config.google_key;
+            fetch(url)
+              .then(res => res.json())
+              .then((data) => {
+                let found = data.results[0].address_components.find(element => {return element.types[0] === 'postal_code'});
+                let response = {
+                  placeID: undefined,
+                  open: undefined,
+                  town: found.long_name,
+                }
+                localStorage.setItem(poi.myid, JSON.stringify(response));
+                resolve(response);
+              })
+          }
+        })
+    }
+  });
 }
+
+
+// function checkCache(poi) {
+//   const cachedHits = localStorage.getItem(poi.myid);
+//   if (cachedHits) {
+//     let found = this.state.selected.findIndex((element) => {return element.id === poi.myid});
+//     let selectedArray = this.state.selected;
+//     selectedArray[found].info = JSON.parse(cachedHits);
+
+//   }
+
+//   fetch(poi.url)
+//     .then(res => res.json())
+//     .then(data => {
+//       console.log(data);
+//     });
+// }
 
 class Weather extends Component {
   constructor(props) {
@@ -36,13 +102,15 @@ class Weather extends Component {
     let urlsArray = this.state.selected.map(element => {
       return {
         myid: element.id,
-        url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating,id&language=zh-TW&key=' + config.google_key,
+        url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating,place_id&language=zh-TW&key=' + config.google_key,
+        add: element.add,
       }
     });
     console.log(urlsArray);
-    // Promise
-    //   .all(urlsArray.map(checkCache))
-    //   .then(() => console.log(`Urls were grabbed`))  
+    Promise
+      .all(urlsArray.map(promiseCache))
+      .then((data) => console.log(data))
+      .catch(() => console.log('haha'))  
   }
 
   render() {
