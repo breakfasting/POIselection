@@ -1,14 +1,15 @@
 import React, { Component } from 'react';
 import {
-  Container, Row, Col, Jumbotron, InputGroup, Input, Button, Table, Card, CardHeader, CardFooter, CardBody, CardSubtitle, Progress,
-  CardTitle, CardText, ListGroup, ListGroupItem 
+  Container, Jumbotron, Card, CardHeader, CardBody, CardSubtitle, Progress,
+  CardTitle, CardText, ListGroup, ListGroupItem,
 } from 'reactstrap';
 import config from './config';
+// eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const grabContent = url => fetch(url)
-  .then(res => res.json())
-  .then(data => console.log(data));
+// const grabContent = url => fetch(url)
+//   .then(res => res.json())
+//   .then(data => console.log(data));
 
 function checkCache(poi) {
   fetch(poi.url)
@@ -59,7 +60,7 @@ class Weather extends Component {
             <CardSubtitle><h6 className="text-muted">大安區</h6></CardSubtitle>
             <CardText className="text-truncate">國立臺灣大學，簡稱臺大、NTU，是臺灣第一所現代綜合大學，為臺灣學生人數最多的高等教育機構。其始於1928年日治時代中期創校的「臺北帝國大學」，1945年中華民國接收臺灣後經改制與兩次易名始用現名。</CardText>
           </CardBody>
-          <ListGroup>
+          <ListGroup flush>
             <ListGroupItem>
               <h6>Opening Hours</h6>
               <Progress multi>
@@ -68,7 +69,17 @@ class Weather extends Component {
                 <Progress bar color="light" value="25"></Progress>
               </Progress>
             </ListGroupItem>
-            <ListGroupItem>Dapibus ac facilisis in</ListGroupItem>
+            <ListGroupItem>
+              <h6>Weather Information</h6>
+              <Progress multi>
+                <Progress bar color="light" value="10"></Progress>
+                <Progress bar color="danger" value="20"></Progress>
+                <Progress bar color="light" value="25"></Progress>
+                <Progress bar color="danger" value="5"></Progress>
+                <Progress bar color="warning" value="25"></Progress>
+                <Progress bar color="light" value="15"></Progress>
+              </Progress>
+            </ListGroupItem>
           </ListGroup>
         </Card>
 
