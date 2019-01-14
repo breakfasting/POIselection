@@ -7,22 +7,13 @@ import config from './config';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-// const grabContent = url => fetch(url)
-//   .then(res => res.json())
-//   .then(data => console.log(data));
-
-// key should be myid
-const templateCache = {
-  placeID: '',
-  open: {},
-  town: '',
-};
-
 const promiseCache = (poi) => {
   return new Promise((resolve, reject) => {
     const cachedHits = localStorage.getItem(poi.myid);
     if (cachedHits) {
-      resolve(JSON.parse(cachedHits));
+      let response = JSON.parse(cachedHits);
+      response.from = 'cache';
+      resolve(response);
     } else {
       console.log('cache not found, proceed to fetch');
       fetch(poi.url)
@@ -36,52 +27,107 @@ const promiseCache = (poi) => {
               .then(res => res.json())
               // .then(data => console.log(data))
               .then((data) => {
-                let found = data.result.address_components.find(element => {return element.types[0] === 'postal_code'});
-                let response = {
-                  placeID: placeID,
-                  open: data.result.opening_hours,
-                  town: found.long_name,
+                let found = data.result.address_components.find(element => { return element.types[0] === 'postal_code' });
+                if (found !== undefined) {
+                  let response = {
+                    placeID: placeID,
+                    open: data.result.opening_hours,
+                    town: found.long_name,
+                    from: 'places',
+                  }
+                  console.log(data);
+                  localStorage.setItem(poi.myid, JSON.stringify(response));
+                  resolve(response);
+                } else {
+                  let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + poi.latlng + '&key=' + config.google_key;
+                  fetch(url)
+                    .then(res => res.json())
+                    .then((data) => {
+                      let found = data.results[0].address_components.find(element => { return element.types[0] === 'postal_code' });
+                      let response = {
+                        placeID: undefined,
+                        open: undefined,
+                        town: found.long_name,
+                        from: 'geocoding',
+                      }
+                      localStorage.setItem(poi.myid, JSON.stringify(response));
+                      resolve(response);
+                    })
                 }
-                console.log(data);
-                localStorage.setItem(poi.myid, JSON.stringify(response));
-                resolve(response);
               })
           } else if (data.status === 'ZERO_RESULTS') {
-            let url = 'https://maps.googleapis.com/maps/api/geocode/json?address=' + poi.add + '&key=' + config.google_key;
+            let url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' + poi.latlng + '&key=' + config.google_key;
             fetch(url)
               .then(res => res.json())
               .then((data) => {
-                let found = data.results[0].address_components.find(element => {return element.types[0] === 'postal_code'});
+                let found = data.results.findIndex(element => {
+                  return element.address_components.find(element => { return element.types[0] === 'postal_code' });
+                })
+                let foundresult = data.results[found].address_components.find(element => { return element.types[0] === 'postal_code' });
                 let response = {
                   placeID: undefined,
                   open: undefined,
-                  town: found.long_name,
+                  town: foundresult.long_name,
+                  from: 'geocoding',
                 }
                 localStorage.setItem(poi.myid, JSON.stringify(response));
                 resolve(response);
               })
+              .catch(() => console.log(url))
           }
         })
     }
   });
 }
 
+function InfoFrom(props) {
+  switch (props.from) {
+    case 'places':
+      return <CardHeader>No cache found, Place ID and Opening hours accquired fresh from google.</CardHeader>
+      break;
+    case 'geocoding':
+      return <CardHeader>No cache found, Zero Place ID results, Town accquired from address.</CardHeader>
+      break;
+    case 'cache':
+      return <CardHeader>Place ID and Opening hours accquired from cache.</CardHeader>
+      break;
+    default:
+      return <CardHeader>Waiting for update.</CardHeader>
+  }
+}
 
-// function checkCache(poi) {
-//   const cachedHits = localStorage.getItem(poi.myid);
-//   if (cachedHits) {
-//     let found = this.state.selected.findIndex((element) => {return element.id === poi.myid});
-//     let selectedArray = this.state.selected;
-//     selectedArray[found].info = JSON.parse(cachedHits);
+function timeToDecimal(h, m) {
+  var dec = parseInt((m / 6) * 10, 10);
 
-//   }
+  return parseFloat(parseInt(h, 10) + '.' + (dec < 10 ? '0' : '') + dec);
+}
 
-//   fetch(poi.url)
-//     .then(res => res.json())
-//     .then(data => {
-//       console.log(data);
-//     });
-// }
+function OpenTime(props) {
+  let hoursList = props.open.periods.filter(element => element.open.day === 0);
+  let hoursArray = [];
+  for (let index = 0; index < hoursList.length; index++) {
+    if (hoursList[index].open.time !== '0000') {
+      let open = timeToDecimal(hoursList[index].open.time.substring(0, 2), hoursList[index].open.time.substring(2, 4));
+      let close = timeToDecimal(hoursList[index].close.time.substring(0, 2), hoursList[index].close.time.substring(2, 4)) - open;
+      if (index > 0) {
+        open = open - timeToDecimal(hoursList[index - 1].close.time.substring(0, 2), hoursList[index - 1].close.time.substring(2, 4));
+      }
+      hoursArray.push(<Progress bar color="light" value={open} max={24} />);
+      hoursArray.push(<Progress bar color="success" value={close} max={24}>Open</Progress>)
+    } else {
+      hoursArray.push(<Progress bar color="light" value={0} max={24} />);
+      hoursArray.push(<Progress bar color="success" value={24} max={24}>Open</Progress>)
+    }
+  }
+  return (
+    <ListGroupItem>
+      <h6>Opening Hours</h6>
+      <Progress multi>
+        {hoursArray.map(e => { return e })}
+      </Progress>
+    </ListGroupItem>
+  );
+}
 
 class Weather extends Component {
   constructor(props) {
@@ -89,6 +135,7 @@ class Weather extends Component {
     this.state = {
       selected: [],
       rows: [],
+      info: [],
     };
   }
 
@@ -104,13 +151,17 @@ class Weather extends Component {
         myid: element.id,
         url: 'https://maps.googleapis.com/maps/api/place/findplacefromtext/json?input=' + element.name + '&inputtype=textquery&fields=formatted_address,name,opening_hours,rating,place_id&language=zh-TW&key=' + config.google_key,
         add: element.add,
+        latlng: element.py + ',' + element.px,
       }
     });
     console.log(urlsArray);
     Promise
       .all(urlsArray.map(promiseCache))
-      .then((data) => console.log(data))
-      .catch(() => console.log('haha'))  
+      .then((data) => {
+        console.log(data);
+        this.setState({ info: data });
+      })
+      .catch(() => console.log('haha'))
   }
 
   render() {
@@ -120,8 +171,34 @@ class Weather extends Component {
           <h1 className="display-2">Weather and Open Hours</h1>
           <p>Displaying the Accquired Weather and Open Hours information from CWB and Google Places API</p>
         </Jumbotron>
+        {this.state.info.map((element, index) => {
+          return (
+            <Card className="mb-5">
+              <InfoFrom from={element.from} />
+              <CardBody>
+                <CardTitle><h5>{this.state.selected[index].name}</h5></CardTitle>
+                <CardSubtitle><h6 className="text-muted">{element.town} {this.state.selected[index].add}</h6></CardSubtitle>
+                <CardText className="text-truncate">{this.state.selected[index].desc}</CardText>
+              </CardBody>
+              <ListGroup flush>
+                {(element.open !== undefined) ? <OpenTime open={element.open} /> : ''}
+                <ListGroupItem>
+                  <h6>Weather Information</h6>
+                  <Progress multi>
+                    <Progress bar color="light" value="10"></Progress>
+                    <Progress bar color="danger" value="20"></Progress>
+                    <Progress bar color="light" value="25"></Progress>
+                    <Progress bar color="danger" value="5"></Progress>
+                    <Progress bar color="warning" value="25"></Progress>
+                    <Progress bar color="light" value="15"></Progress>
+                  </Progress>
+                </ListGroupItem>
+              </ListGroup>
+            </Card>
+          );
+        })}
 
-        <Card className="mb-5">
+        {/* <Card className="mb-5">
           <CardHeader>Place ID and Opening hours accquired from cache.</CardHeader>
           <CardBody>
             <CardTitle><h5>國立臺灣大學</h5></CardTitle>
@@ -165,7 +242,7 @@ class Weather extends Component {
             <CardTitle>Special Title Treatment</CardTitle>
             <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
           </CardBody>
-        </Card>
+        </Card> */}
       </Container>
     );
   }
