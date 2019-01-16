@@ -3,9 +3,11 @@ import {
   Container, Jumbotron, Card, CardHeader, CardBody, CardSubtitle, Progress,
   CardTitle, CardText, ListGroup, ListGroupItem,
 } from 'reactstrap';
+import WeatherData from './WeatherData';
 import config from './config';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import townData from './data/town.json';
 
 const promiseCache = (poi) => {
   return new Promise((resolve, reject) => {
@@ -33,6 +35,9 @@ const promiseCache = (poi) => {
                     placeID: placeID,
                     open: data.result.opening_hours,
                     town: found.long_name,
+                    townName: postalToTown(found.long_name).townName,
+                    countyName: postalToTown(found.long_name).countyName,
+                    countyApi: postalToTown(found.long_name).countyApi,
                     from: 'places',
                   }
                   console.log(data);
@@ -48,6 +53,9 @@ const promiseCache = (poi) => {
                         placeID: undefined,
                         open: undefined,
                         town: found.long_name,
+                        townName: postalToTown(found.long_name).townName,
+                        countyName: postalToTown(found.long_name).countyName,
+                        countyApi: postalToTown(found.long_name).countyApi,
                         from: 'geocoding',
                       }
                       localStorage.setItem(poi.myid, JSON.stringify(response));
@@ -68,6 +76,9 @@ const promiseCache = (poi) => {
                   placeID: undefined,
                   open: undefined,
                   town: foundresult.long_name,
+                  townName: postalToTown(foundresult.long_name).townName,
+                  countyName: postalToTown(foundresult.long_name).countyName,
+                  countyApi: postalToTown(foundresult.long_name).countyApi,
                   from: 'geocoding',
                 }
                 localStorage.setItem(poi.myid, JSON.stringify(response));
@@ -84,13 +95,10 @@ function InfoFrom(props) {
   switch (props.from) {
     case 'places':
       return <CardHeader>No cache found, Place ID and Opening hours accquired fresh from google.</CardHeader>
-      break;
     case 'geocoding':
       return <CardHeader>No cache found, Zero Place ID results, Town accquired from address.</CardHeader>
-      break;
     case 'cache':
       return <CardHeader>Place ID and Opening hours accquired from cache.</CardHeader>
-      break;
     default:
       return <CardHeader>Waiting for update.</CardHeader>
   }
@@ -98,8 +106,18 @@ function InfoFrom(props) {
 
 function timeToDecimal(h, m) {
   var dec = parseInt((m / 6) * 10, 10);
-
   return parseFloat(parseInt(h, 10) + '.' + (dec < 10 ? '0' : '') + dec);
+}
+
+function postalToTown(testpostal) {
+  // let testpostal = '10617';
+  let county = townData.find(element => {return element.towns.find(element => {return element.postal === testpostal.substring(0,3)})});
+  let town = county.towns.find(element => {return element.postal === testpostal.substring(0,3)});
+  return {
+    countyName: county.name,
+    townName: town.name,
+    countyApi: county.api,
+  }
 }
 
 function OpenTime(props) {
@@ -112,11 +130,11 @@ function OpenTime(props) {
       if (index > 0) {
         open = open - timeToDecimal(hoursList[index - 1].close.time.substring(0, 2), hoursList[index - 1].close.time.substring(2, 4));
       }
-      hoursArray.push(<Progress bar color="light" value={open} max={24} />);
-      hoursArray.push(<Progress bar color="success" value={close} max={24}>Open</Progress>)
+      hoursArray.push(<Progress bar color="light" value={open} max={24} key={index * 2}/>);
+      hoursArray.push(<Progress bar color="success" value={close} max={24} key={index * 2 + 1}>Open</Progress>)
     } else {
-      hoursArray.push(<Progress bar color="light" value={0} max={24} />);
-      hoursArray.push(<Progress bar color="success" value={24} max={24}>Open</Progress>)
+      hoursArray.push(<Progress bar color="light" value={0} max={24} key={index * 2} />);
+      hoursArray.push(<Progress bar color="success" value={24} max={24} key={index * 2 + 1}>Open</Progress>)
     }
   }
   return (
@@ -146,6 +164,7 @@ class Weather extends Component {
   }
 
   componentDidMount() {
+    // console.log(postalToTown())
     let urlsArray = this.state.selected.map(element => {
       return {
         myid: element.id,
@@ -161,7 +180,7 @@ class Weather extends Component {
         console.log(data);
         this.setState({ info: data });
       })
-      .catch(() => console.log('haha'))
+      .catch(() => console.log('Error accquiring location data'));
   }
 
   render() {
@@ -173,16 +192,17 @@ class Weather extends Component {
         </Jumbotron>
         {this.state.info.map((element, index) => {
           return (
-            <Card className="mb-5">
+            <Card className="mb-5" key={index}>
               <InfoFrom from={element.from} />
               <CardBody>
                 <CardTitle><h5>{this.state.selected[index].name}</h5></CardTitle>
-                <CardSubtitle><h6 className="text-muted">{element.town} {this.state.selected[index].add}</h6></CardSubtitle>
+                <CardSubtitle><h6 className="text-muted">{postalToTown(element.town).townName} {this.state.selected[index].add}</h6></CardSubtitle>
                 <CardText className="text-truncate">{this.state.selected[index].desc}</CardText>
               </CardBody>
               <ListGroup flush>
                 {(element.open !== undefined) ? <OpenTime open={element.open} /> : ''}
-                <ListGroupItem>
+                <WeatherData api={element.countyApi} town={element.townName}/>
+                {/* <ListGroupItem>
                   <h6>Weather Information</h6>
                   <Progress multi>
                     <Progress bar color="light" value="10"></Progress>
@@ -192,7 +212,7 @@ class Weather extends Component {
                     <Progress bar color="warning" value="25"></Progress>
                     <Progress bar color="light" value="15"></Progress>
                   </Progress>
-                </ListGroupItem>
+                </ListGroupItem> */}
               </ListGroup>
             </Card>
           );
