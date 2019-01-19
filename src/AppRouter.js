@@ -11,6 +11,7 @@ import {
 import App from './App';
 import Matrix from './Matrix';
 import Weather from './Weather';
+import SimpleMap from './SimpleMap';
 
 class AppRouter extends Component {
   constructor(props) {
@@ -46,12 +47,16 @@ class AppRouter extends Component {
                 <NavItem className="nav-link">
                   <Link to="/weather/">Weather</Link>
                 </NavItem>
+                <NavItem className="nav-link">
+                  <Link to="/map/">Map</Link>
+                </NavItem>
               </Nav>
             </Collapse>
           </Navbar>
           <Route path="/" exact component={App} />
           <Route path="/matrix/" component={Matrix} />
           <Route path="/weather/" component={Weather} />
+          <Route path="/map/" component={SimpleMap} />
         </div>
       </Router>
     );

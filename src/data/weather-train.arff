@@ -1,0 +1,37 @@
+@relation travel-changes
+
+@attribute travel-phase     {pre-trip, en-route, sightseeing}
+@attribute poi-class        {Cultural, Ecological, Historical-Site, Temple, Art, Snacks, National-Park, National-Scenic-Area, Agricultural, Hot-springs, Natural-Scenery, Recreational, Sports-Health}
+@attribute cloud-cover      {sunny, cloudy, overcast}
+@attribute pet              {under-16, between-pet, over-40}
+@attribute temperature      {under-17, between-temp, over-35}
+@attribute relative-humidity{under-44, between-rh, over-82}
+@attribute comfort-index    {level-1, level-2, level-3, level-4, level-5, level-6}
+@attribute pop              {no-rain, rain}
+@attribute travel-change    {no, some, substantial}
+
+@data
+%
+% 1 instances
+%
+pre-trip,National-Park, sunny, under-16, under-17, under-44, level-1, no-rain, no
+en-route,Historical-Site,cloudy,under-16,between-temp,over-82,level-6,no-rain,some
+sightseeing,Hot-springs,cloudy,over-40,over-35,over-82,level-1,rain,some
+en-route,National-Park,overcast,under-16,between-temp,under-44,level-1,rain,no
+pre-trip,Ecological,overcast,over-40,between-temp,between-rh,level-5,no-rain,no
+en-route,National-Park,cloudy,between-pet,over-35,under-44,level-1,rain,some
+sightseeing,Art,cloudy,between-pet,over-35,between-rh,level-1,no-rain,no
+sightseeing,Recreational,cloudy,between-pet,between-temp,over-82,level-6,rain,substantial
+pre-trip,Art,sunny,over-40,between-temp,under-44,level-1,no-rain,some
+sightseeing,National-Scenic-Area,sunny,between-pet,over-35,between-rh,level-2,rain,some
+pre-trip,Natural-Scenery,overcast,between-pet,over-35,over-82,level-6,no-rain,no
+sightseeing,National-Scenic-Area,overcast,under-16,under-17,between-rh,level-5,no-rain,substantial
+en-route,National-Scenic-Area,sunny,between-pet,under-17,between-rh,level-4,rain,some
+sightseeing,Sports-Health,sunny,between-pet,over-35,over-82,level-4,rain,some
+pre-trip,Ecological,overcast,over-40,over-35,under-44,level-6,no-rain,some
+pre-trip,Snacks,cloudy,over-40,over-35,over-82,level-2,rain,some
+en-route,Art,overcast,under-16,under-17,over-82,level-3,rain,substantial
+sightseeing,Historical-Site,sunny,over-40,over-35,over-82,level-1,no-rain,substantial
+sightseeing,Ecological,overcast,between-pet,between-temp,over-82,level-5,no-rain,some
+en-route,National-Park,cloudy,between-pet,under-17,between-rh,level-4,no-rain,some
+sightseeing,Temple,sunny,over-40,over-35,under-44,level-5,no-rain,some

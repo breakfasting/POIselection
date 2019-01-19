@@ -13,12 +13,12 @@ class WeatherData extends Component {
   }
 
   componentDidMount() {
-    let endDate = new Date('2019-01-18 08:00:00');
-    let startDate = new Date('2019-01-17 08:00:00');
+    let endDate = new Date('2019-01-21 08:00:00');
+    let startDate = new Date('2019-01-20 08:00:00');
 
     let timeFrom = startDate.toISOString().substring(0, 19);
     let timeTo = endDate.toISOString().substring(0, 19);
-    let requestUrl = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/' + this.props.api + '?Authorization=' + config.cwb_key + '&locationName=' + this.props.town + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo;
+    let requestUrl = 'https://opendata.cwb.gov.tw/api/v1/rest/datastore/' + this.props.api + '?Authorization=' + config.cwb_key + '&locationName=' + this.props.town + '&timeFrom=' + timeFrom + '&timeTo=' + timeTo + '&elementName=Wx,AT,T,RH,CI,PoP6h,Wind';
     fetch(requestUrl)
       .then(data => data.json())
       .then(data => {
