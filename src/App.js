@@ -102,7 +102,7 @@ class App extends Component {
               <Selected selected={this.state.selected} deletePOI={this.deletePOI} />
             </Col>
           </Row>
-            <Button color="danger" onClick={this.copyForPackage}>123123123</Button>
+            {/* <Button color="danger" onClick={this.copyForPackage}>123123123</Button> */}
           <Link to={{
             pathname: '/matrix',
             state: this.state.selected,

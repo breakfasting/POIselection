@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Container, Jumbotron, Card, CardHeader, CardBody, CardSubtitle, Progress,
-  CardTitle, CardText, ListGroup, ListGroupItem,
+  CardTitle, CardText, ListGroup, ListGroupItem, Button
 } from 'reactstrap';
 import WeatherData from './WeatherData';
 import config from './config';
@@ -263,6 +263,12 @@ class Weather extends Component {
             <CardText>With supporting text below as a natural lead-in to additional content.</CardText>
           </CardBody>
         </Card> */}
+          <Link to={{
+            pathname: '/map',
+            state: this.state,
+          }}>
+            <Button color="info" className="mb-5" disabled={this.state.selected.length > 0 ? false : true }>Next Step ></Button>
+          </Link>
       </Container>
     );
   }

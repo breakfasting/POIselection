@@ -5,10 +5,11 @@ import { Form, FormGroup, Label, Input } from 'reactstrap';
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faSuitcase, faEdit } from '@fortawesome/free-solid-svg-icons'
+import { faSuitcase, faEdit, faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons'
 
 library.add(faSuitcase);
-library.add(faEdit)
+library.add(faEdit);
+library.add(faLongArrowAltDown);
 
 class BasicConfig extends Component {
   render() {
@@ -26,7 +27,7 @@ class BasicConfig extends Component {
           <FormGroup>
             <Label for="exampleDate">Date of Departure</Label>
             <Input
-              value="2019-01-25"
+              value="2019-01-26"
               type="date"
               name="date"
               id="exampleDate"

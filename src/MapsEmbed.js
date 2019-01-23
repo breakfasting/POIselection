@@ -1,39 +1,60 @@
 import React, { Component } from 'react';
 import config from './config';
-import { Container, Jumbotron, Button, Alert, Col, Row } from 'reactstrap';
+import { Container, Col, Row, Card, CardBody, CardTitle, CardSubtitle, CardText, Button} from 'reactstrap';
+// eslint-disable-next-line
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const displayArray = [
-  { id: 0, name: '國立臺灣大學', distance: [0, 44, 68, 55, 71, 68] },
-  { id: 4, name: '富貴角遊憩區', distance: [73, 38, 5, 22, 0, 5] },
-  {
-    id: 3,
-    name: '石門婚紗廣場',
-    distance: [59, 54, 21, 0, 21, 21],
-    open: [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-  },
-  {
-    id: 5,
-    name: '白沙灣水域遊憩區',
-    distance: [70, 34, 0, 23, 6, 0],
-    open: [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0]
-  },
-  { id: 2, name: '麟山鼻遊憩區', distance: [70, 34, 0, 23, 6, 0] },
-  {
-    id: 1,
-    name: '淡水老街',
-    distance: [44, 0, 34, 54, 36, 34],
-    open: [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
-  },
-  { id: 0, name: '國立臺灣大學', distance: [0, 44, 68, 55, 71, 68] },
-];
+const timeArray = [71, 22, 21, 0, 34, 44];
+const answer = [0, 4, 3, 5, 2, 1, 0];
 
-const timeArray = [71,22,21,0,34,44];
+function addMinutes(date, minutes) {
+  return new Date(date.getTime() + minutes * 60000);
+}
+
 
 class MapsEmbed extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      selected: [],
+      rows: [],
+      time: [],
+      display: false,
+    }
+  }
+
+  componentWillMount() {
+    if (this.props.location.state !== undefined) {
+      this.setState({
+        selected: this.props.location.state.selected,
+        rows: this.props.location.state.rows,
+      });
+    }
+    let time = new Date('Jan 26, 2019 08:00:00');
+    const answerArray = [];
+    answerArray.push(time.toLocaleTimeString('zh-TW').slice(0, -3));
+    let end = time;
+    let start = time;
+    for (let index = 0; index < answer.length-2; index++) {
+      start = addMinutes(end, timeArray[index]);
+      end = addMinutes(start, 60);
+      answerArray.push(start.toLocaleTimeString('zh-TW').slice(0, -3) + ' - ' + end.toLocaleTimeString('zh-TW').slice(0, -3));
+    }
+    start = addMinutes(end, timeArray[answer.length-2])
+    answerArray.push(start.toLocaleTimeString('zh-TW').slice(0, -3));   
+    console.log(answerArray);
+    this.setState({time: answerArray})
+  }
+
+  componentDidMount() {
+    setTimeout(() => {this.setState({display: true})}, 3000);
+  }
+
   render() {
     return (
       <Container fluid className="mt-4">
-        <Row>
+        {(this.state.display === false)? <div class="spinner-border text-primary" role="status"><span class="sr-only">Loading...</span></div>: 
+        <Row >
           <Col lg={5} md={6} className="justify-content-center d-flex">
             <iframe
               width="600"
@@ -49,9 +70,20 @@ class MapsEmbed extends Component {
             </iframe>
           </Col>
           <Col lg={7} md={6}>
-            <Alert>123123</Alert>
+            {answer.map((element, index) => {
+              return (
+                <Card>
+                  <CardBody>
+                    <CardTitle><h5>{this.state.selected[element].name}</h5></CardTitle>
+                    <CardSubtitle><h6 className="text-muted">{this.state.time[index]}</h6></CardSubtitle>
+                    <CardText className="text-truncate">{this.state.selected[element].desc}</CardText>
+                  </CardBody>
+                </Card>
+              );
+            })}
           </Col>
         </Row>
+        }
       </Container>
 
     );

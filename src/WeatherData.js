@@ -13,8 +13,8 @@ class WeatherData extends Component {
   }
 
   componentDidMount() {
-    let endDate = new Date('2019-01-26 08:00:00');
-    let startDate = new Date('2019-01-25 08:00:00');
+    let endDate = new Date('2019-01-27 08:00:00');
+    let startDate = new Date('2019-01-26 08:00:00');
 
     let timeFrom = startDate.toISOString().substring(0, 19);
     let timeTo = endDate.toISOString().substring(0, 19);
