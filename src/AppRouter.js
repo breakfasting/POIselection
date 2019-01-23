@@ -11,7 +11,7 @@ import {
 import App from './App';
 import Matrix from './Matrix';
 import Weather from './Weather';
-import SimpleMap from './SimpleMap';
+// import Map from './Map';
 import Welcome from './Welcome';
 import BasicConfig from './BasicConfig';
 import PackageTours from './PackageTours';
@@ -50,9 +50,9 @@ class AppRouter extends Component {
                 <NavItem className="nav-link">
                   <Link to="/weather/">Weather</Link>
                 </NavItem>
-                <NavItem className="nav-link">
+                {/* <NavItem className="nav-link">
                   <Link to="/map/">Map</Link>
-                </NavItem>
+                </NavItem> */}
                 <NavItem className="nav-link">
                   <Link to="/welcome/">Welcome</Link>
                 </NavItem>
@@ -68,7 +68,7 @@ class AppRouter extends Component {
           <Route path="/" exact component={App} />
           <Route path="/matrix/" component={Matrix} />
           <Route path="/weather/" component={Weather} />
-          <Route path="/map/" component={SimpleMap} />
+          {/* <Route path="/map/" component={Map} /> */}
           <Route path="/welcome/" component={Welcome} />
           <Route path="/basic/" component={BasicConfig} />
           <Route path="/package/" component={PackageTours} />
