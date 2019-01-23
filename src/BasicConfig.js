@@ -3,6 +3,12 @@ import { Container, Jumbotron, Button, Alert, Col, Row } from 'reactstrap';
 import { Form, FormGroup, Label, Input } from 'reactstrap';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { faSuitcase, faEdit } from '@fortawesome/free-solid-svg-icons'
+
+library.add(faSuitcase);
+library.add(faEdit)
 
 class BasicConfig extends Component {
   render() {
@@ -28,7 +34,7 @@ class BasicConfig extends Component {
             />
           </FormGroup>
 
-          <Alert color="info" className="mt-4">
+          <Alert color="info" className="mt-5">
             Setting the time of departure and arrival of the tour.
           </Alert>
           <Row form>
@@ -82,11 +88,32 @@ class BasicConfig extends Component {
 
         </Form>
 
-        <Link to={{
-          pathname: '/',
-        }}>
-          <Button color="info" className="mb-5" >Next Step ></Button>
-        </Link>
+        <Alert color="info" className="mt-4">
+          Please choose whether to customize from a brand new itinerary or select from existing package tours. 
+        </Alert>
+        <Row className="justify-content-center text-center mb-5">
+          <Col md={8}>
+            <Link to={{
+              pathname: '/',
+            }}>
+              <Button color="info" className="m-3" >
+                <FontAwesomeIcon icon="edit" size="6x" className="px-4" />
+                <br />
+                Custom Tour
+              </Button>
+            </Link>
+            <Link to={{
+              pathname: '/',
+            }}>
+              <Button color="info" className="m-3" >
+                <FontAwesomeIcon icon="suitcase" size="6x" className="px-4" />
+                <br />
+                Package Tours
+              </Button>
+            </Link>
+          </Col>
+        </Row>
+
       </Container>
     );
   }

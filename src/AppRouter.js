@@ -14,6 +14,7 @@ import Weather from './Weather';
 import SimpleMap from './SimpleMap';
 import Welcome from './Welcome';
 import BasicConfig from './BasicConfig';
+import PackageTours from './PackageTours';
 
 class AppRouter extends Component {
   constructor(props) {
@@ -57,7 +58,10 @@ class AppRouter extends Component {
                 </NavItem>
                 <NavItem className="nav-link">
                   <Link to="/basic/">Basic</Link>
-                </NavItem>             
+                </NavItem>   
+                <NavItem className="nav-link">
+                  <Link to="/package/">Package</Link>
+                </NavItem>            
               </Nav>
             </Collapse>
           </Navbar>
@@ -67,6 +71,7 @@ class AppRouter extends Component {
           <Route path="/map/" component={SimpleMap} />
           <Route path="/welcome/" component={Welcome} />
           <Route path="/basic/" component={BasicConfig} />
+          <Route path="/package/" component={PackageTours} />
         </div>
       </Router>
     );

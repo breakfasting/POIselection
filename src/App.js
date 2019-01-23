@@ -17,6 +17,7 @@ class App extends Component {
     this.handleFilter = this.handleFilter.bind(this);
     this.addPOI = this.addPOI.bind(this);
     this.deletePOI = this.deletePOI.bind(this);
+    this.copyForPackage = this.copyForPackage.bind(this);
   }
 
   handleFilter(event) {
@@ -38,6 +39,11 @@ class App extends Component {
     this.setState({
       selected: initArray,
     });
+  }
+
+  copyForPackage() {
+    let a = JSON.stringify(this.state.selected);
+    console.log(a);
   }
 
   componentDidMount() {
@@ -86,6 +92,7 @@ class App extends Component {
               <Selected selected={this.state.selected} deletePOI={this.deletePOI} />
             </Col>
           </Row>
+            <Button color="danger" onClick={this.copyForPackage}>123123123</Button>
           <Link to={{
             pathname: '/matrix',
             state: this.state.selected,
