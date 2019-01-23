@@ -94,7 +94,7 @@ class BasicConfig extends Component {
         <Row className="justify-content-center text-center mb-5">
           <Col md={8}>
             <Link to={{
-              pathname: '/',
+              pathname: '/custom/',
             }}>
               <Button color="info" className="m-3" >
                 <FontAwesomeIcon icon="edit" size="6x" className="px-4" />
@@ -103,7 +103,7 @@ class BasicConfig extends Component {
               </Button>
             </Link>
             <Link to={{
-              pathname: '/',
+              pathname: '/package/',
             }}>
               <Button color="info" className="m-3" >
                 <FontAwesomeIcon icon="suitcase" size="6x" className="px-4" />

@@ -11,10 +11,10 @@ import {
 import App from './App';
 import Matrix from './Matrix';
 import Weather from './Weather';
-// import Map from './Map';
 import Welcome from './Welcome';
 import BasicConfig from './BasicConfig';
 import PackageTours from './PackageTours';
+import MapsEmbed from './MapsEmbed';
 
 class AppRouter extends Component {
   constructor(props) {
@@ -42,7 +42,16 @@ class AppRouter extends Component {
             <Collapse isOpen={this.state.isOpen} navbar>
               <Nav className="ml-auto" navbar>
                 <NavItem className="nav-link">
-                  <Link to="/">Home</Link>
+                  <Link to="/">Welcome</Link>
+                </NavItem>
+                <NavItem className="nav-link">
+                  <Link to="/basic/">Basic</Link>
+                </NavItem>   
+                <NavItem className="nav-link">
+                  <Link to="/package/">Package</Link>
+                </NavItem>
+                <NavItem className="nav-link">
+                  <Link to="/custom/">Custom</Link>
                 </NavItem>
                 <NavItem className="nav-link">
                   <Link to="/matrix/">Matrix</Link>
@@ -50,28 +59,21 @@ class AppRouter extends Component {
                 <NavItem className="nav-link">
                   <Link to="/weather/">Weather</Link>
                 </NavItem>
-                {/* <NavItem className="nav-link">
+                <NavItem className="nav-link">
                   <Link to="/map/">Map</Link>
-                </NavItem> */}
-                <NavItem className="nav-link">
-                  <Link to="/welcome/">Welcome</Link>
                 </NavItem>
-                <NavItem className="nav-link">
-                  <Link to="/basic/">Basic</Link>
-                </NavItem>   
-                <NavItem className="nav-link">
-                  <Link to="/package/">Package</Link>
-                </NavItem>            
+
               </Nav>
             </Collapse>
           </Navbar>
-          <Route path="/" exact component={App} />
-          <Route path="/matrix/" component={Matrix} />
-          <Route path="/weather/" component={Weather} />
-          {/* <Route path="/map/" component={Map} /> */}
-          <Route path="/welcome/" component={Welcome} />
+          <Route path="/" exact component={Welcome} />
           <Route path="/basic/" component={BasicConfig} />
           <Route path="/package/" component={PackageTours} />
+          <Route path="/custom/" component={App} />
+          <Route path="/matrix/" component={Matrix} />
+          <Route path="/weather/" component={Weather} />
+          <Route path="/map/" component={MapsEmbed} />
+
         </div>
       </Router>
     );

@@ -4,6 +4,7 @@ import { Row, Col, InputGroup, Input } from 'reactstrap';
 import { Card, CardColumns, CardTitle, CardText, CardImg, CardImgOverlay, CardBody, CardSubtitle } from 'reactstrap';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import displayList from './data/package-tours-data.json';
 
 
 
@@ -23,7 +24,13 @@ class PackageTours extends Component {
     })
   }
 
+  componentDidMount() {
+  }
+
   render() {
+    let results = displayList.array;
+    let filtered = results.filter(element => { return element.tag.find(e => { return e.indexOf(this.state.filterText) > -1 }) });
+    console.log(filtered)
     return (
       <Container>
         <Jumbotron className="mt-5 text-center">
@@ -61,37 +68,28 @@ class PackageTours extends Component {
             {/* <DisplayList filterText={this.state.filterText} addPOI={this.addPOI} /> */}
 
             <CardColumns className="mt-5">
+              {filtered.slice(0, 9).map(e => {
+                return (
+                  <Card>
+                    <CardImg top width="100%" src={e.pic} />
+                    <CardBody>
+                      <CardTitle><h5>{e.name}</h5></CardTitle>
+                      <CardSubtitle><h6 className="text-muted">{e.desc}</h6></CardSubtitle>
+                      <Link to={{
+                      pathname: '/custom/',
+                      state: e.selected,
+                    }}>
+                      <Button color="info" size="sm" >Select ></Button>
+                    </Link>
+                    </CardBody>
 
-              <Card>
-                <CardImg top width="100%" src="https://www.taiwan.net.tw/pic.ashx?qp=1/big_journey/pic_126_2.jpg&sizetype=2" />
-                <CardBody>
-                  <CardTitle><h5>臺北都會一日遊</h5></CardTitle>
-                  <CardSubtitle><h6 className="text-muted">#古蹟巡禮#寺廟祈福#逛夜市#博物館</h6></CardSubtitle>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardImg top width="100%" src="https://www.taiwan.net.tw/pic.ashx?qp=1/big_journey/pic_231_3.jpg&sizetype=2" />
-                <CardBody>
-                  <CardTitle><h5>高雄美食一日遊</h5></CardTitle>
-                  <CardSubtitle><h6 className="text-muted">#非吃不可</h6></CardSubtitle>
-                </CardBody>
-              </Card>
-              <Card>
-                <CardImg top width="100%" src="https://www.taiwan.net.tw/pic.ashx?qp=1/big_journey/pic_466_3.jpg&sizetype=2" />
-                <CardBody>
-                  <CardTitle><h5>艋舺寺廟古蹟一日遊</h5></CardTitle>
-                  <CardSubtitle><h6 className="text-muted">#寺廟祈福#古蹟巡禮</h6></CardSubtitle>
-                </CardBody>
-              </Card>
-
+                  </Card>
+                );
+              })}
             </CardColumns>
           </Col>
         </Row>
-        <Link to={{
-          pathname: '/basic/',
-        }}>
-          <Button color="info" className="mb-5" >Next Step ></Button>
-        </Link>
+
       </Container>
     );
   }
