@@ -2,12 +2,17 @@ import React, { Component } from 'react';
 import { Container, Jumbotron, Button, Alert } from 'reactstrap';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
+import logo from './cover.jpg';
+
+const divStyle = {
+  background: 'linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url(' + logo + ')',
+};
 
 class Welcome extends Component {
   render() {
     return (
       <Container>
-        <Jumbotron className="mt-5 text-center">
+        <Jumbotron className="mt-5 text-center text-light" style={divStyle}>
           <h1 className="display-2">WeatherPlans</h1>
           <p>Applying The Time-Expanded Network in Dynamic Travel Itinerary Planning:<br/> Decision-Making Under Varying Weather Information</p>
         </Jumbotron>
