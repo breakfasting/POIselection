@@ -16,6 +16,7 @@ import BasicConfig from './BasicConfig';
 import PackageTours from './PackageTours';
 import MapsEmbed from './MapsEmbed';
 import MapsPreview from './MapsPreview';
+import Survey from './Survey';
 
 class AppRouter extends Component {
   constructor(props) {
@@ -58,6 +59,9 @@ class AppRouter extends Component {
                   <Link to="/matrix/">Matrix</Link>
                 </NavItem>
                 <NavItem className="nav-link">
+                  <Link to="/preview/">Preview</Link>
+                </NavItem>
+                <NavItem className="nav-link">
                   <Link to="/weather/">Weather</Link>
                 </NavItem>
                 <NavItem className="nav-link">
@@ -75,7 +79,7 @@ class AppRouter extends Component {
           <Route path="/preview/" component={MapsPreview} />
           <Route path="/weather/" component={Weather} />
           <Route path="/map/" component={MapsEmbed} />
-
+          <Route path="/survey/" component={Survey} />
         </div>
       </Router>
     );

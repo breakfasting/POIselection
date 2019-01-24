@@ -6,6 +6,7 @@ import logo from './cover.jpg';
 
 const divStyle = {
   background: 'linear-gradient( rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4) ), url(' + logo + ')',
+  backgroundSize: 'cover',
 };
 
 class Welcome extends Component {

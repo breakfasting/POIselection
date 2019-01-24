@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import config from './config';
-import { Container, Col, Row, Card, CardBody, CardTitle, CardSubtitle, CardText, Button } from 'reactstrap';
+import { Container, Col, Row, Card, CardBody, CardTitle, CardSubtitle, CardText, Button, Alert } from 'reactstrap';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
@@ -73,6 +73,7 @@ class MapsEmbed extends Component {
               </iframe>
             </Col>
             <Col lg={7} md={6}>
+                <Alert>Due to raining, the itinerary of the trip is reorganized with a 7% increase in travel time</Alert>
               {answer.map((element, index) => {
                 return (
                   <Card className="my-2">

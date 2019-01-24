@@ -1,0 +1,15 @@
+@relation travel-changes
+
+@attribute poi-class        {Cultural, Ecological, Historical-Site, Temple, Art, Snacks, National-Park, National-Scenic-Area, Agricultural, Hot-springs, Natural-Scenery, Recreational, Sports-Health}
+@attribute pet              {under-16, between-pet, over-40}
+@attribute travel-change    {no, some, substantial}
+
+@data
+%
+% 5 instances
+%
+National-Park,over-40,substantial
+National-Scenic-Area,over-40,substantial
+Natural-Scenery,over-40,substantial
+Recreational,over-40,substantial
+Sports-Health,over-40,some
