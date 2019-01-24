@@ -1,11 +1,11 @@
 import React, { Component } from 'react';
 import config from './config';
-import { Container, Col, Row, Card, CardBody, CardTitle, CardSubtitle, CardText, Button } from 'reactstrap';
+import { Container, Col, Row, Card, CardBody, CardTitle, CardSubtitle, CardText, Button, Alert } from 'reactstrap';
 // eslint-disable-next-line
 import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
-const timeArray = [71, 22, 21, 0, 34, 44];
-const answer = [0, 4, 3, 5, 2, 1, 0];
+const timeArray = [55, 21, 5, 0, 34, 44];
+const answer = [0, 3, 4, 5, 2, 1, 0];
 
 function addMinutes(date, minutes) {
   return new Date(date.getTime() + minutes * 60000);
@@ -19,6 +19,7 @@ class MapsEmbed extends Component {
       selected: [],
       rows: [],
       time: [],
+      answer: [],
       display: false,
     }
   }
@@ -28,6 +29,7 @@ class MapsEmbed extends Component {
       this.setState({
         selected: this.props.location.state.selected,
         rows: this.props.location.state.rows,
+        answer: [0, 3, 4, 5, 2, 1, 0],
       });
     }
     let time = new Date('Jan 26, 2019 08:00:00');
@@ -47,7 +49,7 @@ class MapsEmbed extends Component {
   }
 
   componentDidMount() {
-    setTimeout(() => { this.setState({ display: true }) }, 3000);
+    setTimeout(() => { this.setState({ display: true }) }, 400);
   }
 
   render() {
@@ -73,6 +75,7 @@ class MapsEmbed extends Component {
               </iframe>
             </Col>
             <Col lg={7} md={6}>
+                <Alert>A preview of the shortest travel time before implementing weather info.</Alert>
               {answer.map((element, index) => {
                 return (
                   <Card className="my-2">
@@ -87,6 +90,15 @@ class MapsEmbed extends Component {
             </Col>
           </Row>
         }
+          <Link to={{
+            pathname: '/weather',
+            state: {
+              selected: this.state.selected,
+              rows: this.state.rows,
+            }
+          }}>
+            <Button color="info" className="mb-5" >Next Step ></Button>
+          </Link>
       </Container>
 
     );

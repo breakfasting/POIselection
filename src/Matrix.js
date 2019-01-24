@@ -69,7 +69,7 @@ class Matrix extends Component {
           </tbody>
         </Table>
         <Link to={{
-            pathname: '/weather',
+            pathname: '/preview',
             state: this.state,
           }}>
             <Button color="info" className="mb-5" disabled={this.state.selected.length > 0 ? false : true }>Next Step ></Button>

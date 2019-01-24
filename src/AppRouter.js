@@ -15,6 +15,7 @@ import Welcome from './Welcome';
 import BasicConfig from './BasicConfig';
 import PackageTours from './PackageTours';
 import MapsEmbed from './MapsEmbed';
+import MapsPreview from './MapsPreview';
 
 class AppRouter extends Component {
   constructor(props) {
@@ -71,6 +72,7 @@ class AppRouter extends Component {
           <Route path="/package/" component={PackageTours} />
           <Route path="/custom/" component={App} />
           <Route path="/matrix/" component={Matrix} />
+          <Route path="/preview/" component={MapsPreview} />
           <Route path="/weather/" component={Weather} />
           <Route path="/map/" component={MapsEmbed} />
 
